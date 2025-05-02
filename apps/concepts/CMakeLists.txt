@@ -1,0 +1,2 @@
+add_executable(concepts concepts.cpp)
+target_link_libraries(concepts PRIVATE dp_concepts)
