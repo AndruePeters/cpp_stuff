@@ -5,8 +5,6 @@
 #include <string>
 #include <string_view>
 
-#include <catch2/catch_test_macros.hpp>
-
 // Test our StringLike Concepts
 #include <concepts/string_like.hpp>
 
@@ -20,16 +18,17 @@
 //      4. std::string
 //      Should a span of char be stringlike?
 template <typename T> requires dp::StringLike<T>
-bool isStringLike(const T& t) {
-    return true;
+void isStringLike(const T& t) {
+    static_assert(true, "isStringLikeTrue");
 }
 
 template <typename T> requires (!dp::StringLike<T>)
-bool isStringLike(const T& t) {
-    return false;
+void isNotStringLike(const T& t) {
+    static_assert(true, "isNotStringLikeTrue");
 }
 
-TEST_CASE( "Items are StringLike") {
+int main()
+{
     const char* constCharStar = "This is a const char*";
     constexpr char constCharArr [4] = {'A', 'B', 'C', '\0'};
     char CharArr [4] = {'A', 'B', 'C', '\0'};
@@ -38,15 +37,15 @@ TEST_CASE( "Items are StringLike") {
     std::string_view stringView = "This is a std::string_view";
     constexpr std::string_view constStringView = "This is a const std::string_view";
 
-    REQUIRE (isStringLike(constCharStar));
-    REQUIRE (isStringLike(constCharArr));
-    REQUIRE (isStringLike(CharArr));
-    REQUIRE (isStringLike(string));
-    REQUIRE (isStringLike(constString));
-    REQUIRE (isStringLike(stringView));
-    REQUIRE (isStringLike(constStringView));
+    isStringLike(constCharStar);
+    isStringLike(constCharArr);
+    isStringLike(CharArr);
+    isStringLike(string);
+    isStringLike(constString);
+    isStringLike(stringView);
+    isStringLike(constStringView);
 
-    REQUIRE_FALSE(isStringLike(5));
-    REQUIRE_FALSE(isStringLike(5.0f));
-    REQUIRE_FALSE(isStringLike(5.0));
+    isNotStringLike(5);
+    isNotStringLike(5.0f);
+    isNotStringLike(5.0);
 }
